@@ -29,27 +29,26 @@ namespace CarReportSystem
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
+ 
 
-                using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create))
-                {
-                    try
-                    {
-                        //シリアル化して保存
-                        formatter.Serialize(fs, carReports);
-                    }
-                    catch (SerializationException se)
-                    {
-                        Console.WriteLine("Failed to serialize. Reason: " + se.Message);
-                        throw;
-                    }
-                }
+
+
+        private void btOpenPicture_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.Image = Image.FromFile(openFileDialog1.FileName);
+                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+
             }
-        }
+        } //画像オープン
+
+        private void btDeletePicture_Click(object sender, EventArgs e) //画像削除
+        {
+            pictureBox1.Image = null;
+        }　
+
+
 
         private void button1_Click(object sender, EventArgs e)  //レポート追加
         {
@@ -71,7 +70,7 @@ namespace CarReportSystem
             cbCarName.Text = "";
             tbReport.Text = "";
             pictureBox1.Image = null;
-            
+
 
 
 
@@ -79,46 +78,6 @@ namespace CarReportSystem
             Until();
 
         }
-
-        private void btOpenPicture_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                pictureBox1.Image = Image.FromFile(openFileDialog1.FileName);
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-
-            }
-        } //画像オープン
-
-        private void btDeletePicture_Click(object sender, EventArgs e) //画像削除
-        {
-            pictureBox1.Image = null;
-        }　
-
-        private void Until()
-        {
-            if (carReports.Count > 0)
-            {
-                btRemakeReport.Enabled = true;
-                btDeleteReport.Enabled = true;
-            }
-            else
-            {
-                btRemakeReport.Enabled = false;
-                btDeleteReport.Enabled = false;
-            }
-
-            toyota.Checked = false;
-            subaru.Checked = false;
-            nissan.Checked = false;
-            honda.Checked = false;
-            gaisya.Checked = false;
-            sonota.Checked = true;
-
-            dataGridView1.ClearSelection();
-        }//削除、変更ボタン非表示
-
-
         private void btDeleteReport_Click(object sender, EventArgs e) //レポート削除
         {
             if (dataGridView1.SelectedRows.Count <= 0)
@@ -160,47 +119,7 @@ namespace CarReportSystem
             pictureBox1.Image = null;
         }
 
-         public　CarMaker CheckMaker()
-        {
-            var RadioButtonChecked_InGroup = groupBox1.Controls.OfType<RadioButton>()
-                    .SingleOrDefault(rb => rb.Checked == true);
 
-            toyota.Checked = false;
-            subaru.Checked = false;
-            nissan.Checked = false;
-            honda.Checked = false;
-            gaisya.Checked = false;
-            sonota.Checked = false;
-
-            switch (RadioButtonChecked_InGroup.Text)
-            {
-                case "トヨタ":
-                    return CarMaker.トヨタ;
-                    
-
-                case "日産":
-                    return CarMaker.日産;
-                    
-
-                case "ホンダ":
-                    return CarMaker.ホンダ;
-                    
-
-                case "スバル":
-                    return CarMaker.スバル;
-                   
-
-                case "外車":
-                    return CarMaker.外車;
-                    
-                    
-
-                default :
-                    return CarMaker.その他;
-                    
-
-            }
-        } //チェックめかー
 
         private void btOpenReport_Click(object sender, EventArgs e)
         {
@@ -225,12 +144,29 @@ namespace CarReportSystem
                     }
                 }
             }
-        }
+        } //データ開く
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
 
-        }
+                using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create))
+                {
+                    try
+                    {
+                        //シリアル化して保存
+                        formatter.Serialize(fs, carReports);
+                    }
+                    catch (SerializationException se)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + se.Message);
+                        throw;
+                    }
+                }
+            }
+        }//データ保存
 
         private void dataGridView1_Click(object sender, EventArgs e)
         {
@@ -282,8 +218,72 @@ namespace CarReportSystem
                     break;
             }
 
-        }
+        } //選択したデータテキストに表示
 
+        private void Until()
+        {
+            if (carReports.Count > 0)
+            {
+                btRemakeReport.Enabled = true;
+                btDeleteReport.Enabled = true;
+            }
+            else
+            {
+                btRemakeReport.Enabled = false;
+                btDeleteReport.Enabled = false;
+            }
+
+            toyota.Checked = false;
+            subaru.Checked = false;
+            nissan.Checked = false;
+            honda.Checked = false;
+            gaisya.Checked = false;
+            sonota.Checked = true;
+
+            dataGridView1.ClearSelection();
+        }//削除、変更ボタン非表示
+
+        public CarMaker CheckMaker()
+        {
+            var RadioButtonChecked_InGroup = groupBox1.Controls.OfType<RadioButton>()
+                    .SingleOrDefault(rb => rb.Checked == true);
+
+            toyota.Checked = false;
+            subaru.Checked = false;
+            nissan.Checked = false;
+            honda.Checked = false;
+            gaisya.Checked = false;
+            sonota.Checked = false;
+
+            switch (RadioButtonChecked_InGroup.Text)
+            {
+                case "トヨタ":
+                    return CarMaker.トヨタ;
+
+
+                case "日産":
+                    return CarMaker.日産;
+
+
+                case "ホンダ":
+                    return CarMaker.ホンダ;
+
+
+                case "スバル":
+                    return CarMaker.スバル;
+
+
+                case "外車":
+                    return CarMaker.外車;
+
+
+
+                default:
+                    return CarMaker.その他;
+
+
+            }
+        } //チェックめかー
 
     }
 }
