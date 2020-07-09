@@ -322,6 +322,7 @@
             this.btFinish.TabIndex = 26;
             this.btFinish.Text = "終了";
             this.btFinish.UseVisualStyleBackColor = true;
+            this.btFinish.Click += new System.EventHandler(this.btFinish_Click);
             // 
             // openFileDialog1
             // 

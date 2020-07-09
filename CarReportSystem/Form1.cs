@@ -53,7 +53,7 @@ namespace CarReportSystem
         private void button1_Click(object sender, EventArgs e)  //レポート追加
         {
 
-
+            DateTime dt = DateTime.Now;
 
             CarReport obj = new CarReport()
             {
@@ -70,6 +70,7 @@ namespace CarReportSystem
             cbCarName.Text = "";
             tbReport.Text = "";
             pictureBox1.Image = null;
+            dtpDay.Value = dt;
 
 
 
@@ -285,5 +286,9 @@ namespace CarReportSystem
             }
         } //チェックめかー
 
+        private void btFinish_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
